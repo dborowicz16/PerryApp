@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-key */
 import React from "react"
-import { ImageStyle, TextStyle, View, ViewStyle } from "react-native"
+import { ImageStyle, TextStyle, View, ViewStyle, Image, Dimensions } from "react-native"
 import { Icon, iconRegistry, IconTypes, Text } from "../../../components"
 import { colors, spacing } from "../../../theme"
 import { Demo } from "../DemoShowroomScreen"
@@ -30,49 +30,17 @@ const $customIcon: ImageStyle = {
   tintColor: colors.palette.neutral100,
 }
 
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
+
 export const DemoIcon: Demo = {
-  name: "Icon",
-  description:
-    "A component to render a registered icon. It is wrapped in a <TouchableOpacity /> if `onPress` is provided, otherwise a <View />.",
   data: [
-    <DemoUseCase
-      name="Icons"
-      description="List of icons registered inside the component."
-      layout="row"
-    >
-      {Object.keys(iconRegistry).map((icon) => (
-        <View key={icon} style={$iconTile}>
-          <Icon icon={icon as IconTypes} color={colors.tint} size={35} />
-
-          <Text size="xs" style={$iconTileLabel}>
-            {icon}
-          </Text>
-        </View>
-      ))}
-    </DemoUseCase>,
-
-    <DemoUseCase name="Size" description="There's a size prop." layout="row">
-      <Icon icon="ladybug" containerStyle={$demoIconContainer} />
-      <Icon icon="ladybug" size={35} containerStyle={$demoIconContainer} />
-      <Icon icon="ladybug" size={50} containerStyle={$demoIconContainer} />
-      <Icon icon="ladybug" size={75} containerStyle={$demoIconContainer} />
-    </DemoUseCase>,
-
-    <DemoUseCase name="Color" description="There's a color prop." layout="row">
-      <Icon icon="ladybug" color={colors.palette.accent500} containerStyle={$demoIconContainer} />
-      <Icon icon="ladybug" color={colors.palette.primary500} containerStyle={$demoIconContainer} />
-      <Icon
-        icon="ladybug"
-        color={colors.palette.secondary500}
-        containerStyle={$demoIconContainer}
-      />
-      <Icon icon="ladybug" color={colors.palette.neutral700} containerStyle={$demoIconContainer} />
-      <Icon icon="ladybug" color={colors.palette.angry500} containerStyle={$demoIconContainer} />
-    </DemoUseCase>,
-
-    <DemoUseCase name="Styling" description="The component can be styled easily." layout="row">
-      <Icon icon="ladybug" style={$customIcon} size={40} containerStyle={$customIconContainer} />
-    </DemoUseCase>,
+    <>
+      <View style={{ display: 'flex', width: '100%', justifyContent: 'flex-end', alignItems: 'center' }}>
+        <Image source={require('../../../../assets/images/perryHeader2.png')} style={{ width: 250, height: 250, resizeMode: 'contain' }} />
+        <Text preset="heading" text="Welcome To The Official Perry App" style={{ textAlign: 'center' }} />
+      </View>
+    </>,
   ],
 }
 

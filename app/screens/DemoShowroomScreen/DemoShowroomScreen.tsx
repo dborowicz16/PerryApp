@@ -24,8 +24,8 @@ import { DrawerIconButton } from "./DrawerIconButton"
 const logo = require("../../../assets/images/logo.png")
 
 export interface Demo {
-  name: string
-  description: string
+  name?: string
+  description?: string
   data: ReactElement[]
 }
 
@@ -200,31 +200,10 @@ export const DemoShowroomScreen: FC<DemoTabScreenProps<"DemoShowroom">> =
       >
         <Screen preset="fixed" safeAreaEdges={["top"]} contentContainerStyle={$screenContainer}>
           <DrawerIconButton onPress={toggleDrawer} {...{ open, progress }} />
-
-          <SectionList
-            ref={listRef}
-            contentContainerStyle={$sectionListContentContainer}
-            stickySectionHeadersEnabled={false}
-            sections={Object.values(Demos)}
-            renderItem={({ item }) => item}
-            renderSectionFooter={() => <View style={$demoUseCasesSpacer} />}
-            ListHeaderComponent={
-              <View style={$heading}>
-                <Text preset="heading" tx="demoShowroomScreen.jumpStart" />
-              </View>
-            }
-            onScrollToIndexFailed={scrollToIndexFailed}
-            renderSectionHeader={({ section }) => {
-              return (
-                <View>
-                  <Text preset="heading" style={$demoItemName}>
-                    {section.name}
-                  </Text>
-                  <Text style={$demoItemDescription}>{section.description}</Text>
-                </View>
-              )
-            }}
-          />
+          <View style={{ display: 'flex', width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center' }}>
+            <Image source={require('../../../assets/images/perryHeader2.png')} style={{ width: 250, height: 250, resizeMode: 'contain' }} />
+            <Text preset="heading" text="Welcome To The Official Perry App" style={{ textAlign: 'center' }} />
+          </View>
         </Screen>
       </DrawerLayout>
     )
@@ -251,13 +230,13 @@ const $heading: ViewStyle = {
 }
 
 const $logoImage: ImageStyle = {
-  height: 42,
-  width: 77,
+  // height: 42,
+  // width: 77,
 }
 
 const $logoContainer: ViewStyle = {
   alignSelf: "flex-start",
-  height: 56,
+  // height: 56,
   paddingHorizontal: spacing.large,
 }
 
@@ -268,15 +247,15 @@ const $menuContainer: ViewStyle = {
 
 const $demoItemName: TextStyle = {
   fontSize: 24,
-  marginBottom: spacing.medium,
+  // marginBottom: spacing.medium,
 }
 
 const $demoItemDescription: TextStyle = {
-  marginBottom: spacing.huge,
+  // marginBottom: spacing.huge,
 }
 
 const $demoUseCasesSpacer: ViewStyle = {
-  paddingBottom: spacing.huge,
+  // paddingBottom: spacing.huge,
 }
 
 // @demo remove-file

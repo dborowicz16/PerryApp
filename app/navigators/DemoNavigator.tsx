@@ -48,8 +48,8 @@ export function DemoNavigator() {
         name="DemoShowroom"
         component={DemoShowroomScreen}
         options={{
-          tabBarLabel: translate("demoNavigator.componentsTab"),
-          tabBarIcon: ({ focused }) => <Icon icon="components" color={focused && colors.tint} />,
+          tabBarLabel: "Home",
+          tabBarIcon: ({ focused }) => <Icon icon="home" color={focused && '#9a9ca1'} size={24}/>,
         }}
       />
 
@@ -57,8 +57,8 @@ export function DemoNavigator() {
         name="DemoCommunity"
         component={DemoCommunityScreen}
         options={{
-          tabBarLabel: translate("demoNavigator.communityTab"),
-          tabBarIcon: ({ focused }) => <Icon icon="community" color={focused && colors.tint} />,
+          tabBarLabel: "About Perry",
+          tabBarIcon: ({ focused }) => <Icon icon="cat" color={focused && '#9a9ca1'} size={24} />,
         }}
       />
 
@@ -66,8 +66,8 @@ export function DemoNavigator() {
         name="DemoPodcastList"
         component={DemoPodcastListScreen}
         options={{
-          tabBarLabel: translate("demoNavigator.podcastListTab"),
-          tabBarIcon: ({ focused }) => <Icon icon="podcast" color={focused && colors.tint} />,
+          tabBarLabel: "Updates",
+          tabBarIcon: ({ focused }) => <Icon icon="camera" color={focused && '#9a9ca1'} size={24} />,
         }}
       />
 
@@ -75,8 +75,8 @@ export function DemoNavigator() {
         name="DemoDebug"
         component={DemoDebugScreen}
         options={{
-          tabBarLabel: translate("demoNavigator.debugTab"),
-          tabBarIcon: ({ focused }) => <Icon icon="debug" color={focused && colors.tint} />,
+          tabBarLabel: "Testimonials",
+          tabBarIcon: ({ focused }) => <Icon icon="smiley" color={focused && '#9a9ca1'} size={24} />,
         }}
       />
     </Tab.Navigator>
