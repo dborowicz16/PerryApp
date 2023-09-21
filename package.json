@@ -36,6 +36,7 @@
     "react-error-overlay": "6.0.9"
   },
   "dependencies": {
+    "@apollo/client": "^3.8.1",
     "@expo-google-fonts/space-grotesk": "^0.2.2",
     "@expo/webpack-config": "^0.17.2",
     "@react-native-async-storage/async-storage": "~1.17.3",
@@ -59,6 +60,7 @@
     "expo-modules-core": "~1.0.4 || ~1.1.0",
     "expo-splash-screen": "~0.17.5",
     "expo-status-bar": "~1.4.2",
+    "graphql": "^15.8.0",
     "i18n-js": "3.9.2",
     "mobx": "6.6.0",
     "mobx-react-lite": "3.4.0",
