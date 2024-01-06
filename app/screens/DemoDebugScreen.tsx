@@ -3,138 +3,269 @@ import * as Application from "expo-application"
 import { Linking, Platform, TextStyle, View, ViewStyle } from "react-native"
 import { Button, ListItem, Screen, Text } from "../components"
 import { DemoTabScreenProps } from "../navigators/DemoNavigator"
-import { colors, spacing } from "../theme"
-import { isRTL } from "../i18n"
-import { useStores } from "../models"
+import { useState, useEffect } from "react";
+import Utils from "../common/Utils";
+import { Font, ForegroundColor, Sounds } from "../common/Const";
+import Layout from "../components/Layout";
+import Divider from "../components/Divider";
+import GridItem from "../components/GridItem";
+import GameModeSelector from "../components/GameModeSelector";
 
-function openLinkInBrowser(url: string) {
-  Linking.canOpenURL(url).then((canOpen) => canOpen && Linking.openURL(url))
-}
+const winArrays = [
+  [0, 1, 2],
+  [3, 4, 5],
+  [6, 7, 8],
+
+  [0, 3, 6],
+  [1, 4, 7],
+  [2, 5, 8],
+
+  [0, 4, 8],
+  [2, 4, 6],
+];
 
 export const DemoDebugScreen: FC<DemoTabScreenProps<"DemoDebug">> = function DemoDebugScreen(
   _props,
 ) {
-  const {
-    authenticationStore: { logout },
-  } = useStores()
+  const [gameWith, setGameWith] = useState<"Bot" | "Player">("Bot");
 
-  const usingHermes = typeof HermesInternal === "object" && HermesInternal !== null
+  const [turn, setTurn] = useState<"CROSS" | "ZERO">("CROSS");
+  const [grids, setGrids] = useState<Array<"CROSS" | "ZERO" | undefined>>([
+    ...new Array(9),
+  ]);
+  const [gameState, setGameState] = useState<"Game Over" | "Game Draw" | "">(
+    ""
+  );
+  const [winner, setWinner] = useState<"CROSS" | "ZERO" | undefined>(undefined);
+  const [winningIndexes, setWinningIndexes] = useState<Array<Array<number>>>(
+    []
+  );
 
-  const demoReactotron = React.useMemo(
-    () => async () => {
-      console.tron.display({
-        name: "DISPLAY",
-        value: {
-          appId: Application.applicationId,
-          appName: Application.applicationName,
-          appVersion: Application.nativeApplicationVersion,
-          appBuildVersion: Application.nativeBuildVersion,
-          hermesEnabled: usingHermes,
-        },
-        important: true,
-      })
-    },
-    [],
-  )
+  useEffect(() => {
+    if (grids.includes("CROSS") === false && grids.includes("ZERO") === false) {
+      return;
+    }
+
+    const didSomeoneWon = checkWinner();
+    if (didSomeoneWon) {
+      setGameState("Game Over");
+    } else if (didSomeoneWon === false && grids.includes(undefined) === false) {
+      setGameState("Game Draw");
+    } else {
+      setTurn(turn === "CROSS" ? "ZERO" : "CROSS");
+    }
+  }, [grids]);
+
+  useEffect(() => {
+    //CHECK IF PLAYING AGAINTS BOT
+    if (turn === "ZERO" && gameWith === "Bot") {
+      onBotsTurn();
+    }
+  }, [turn]);
+
+  useEffect(() => {
+    if (gameState === "Game Over") {
+      Utils.PlaySound(Sounds.Game_Won);
+    } else if (gameState === "Game Draw") {
+      Utils.PlaySound(Sounds.Game_Draw);
+    }
+  }, [gameState]);
+
+  const onBotsTurn = async () => {
+    await Utils.Sleep();
+    //TAKE TURN AUTOMATICALLY
+    let emptyIndexes: number[] = [];
+    grids.map((grid, index) => {
+      if (grid === undefined) {
+        emptyIndexes.push(index);
+      }
+    });
+
+    const botSelectedIndex = Math.floor(Math.random() * emptyIndexes.length);
+    onGridPress(emptyIndexes[botSelectedIndex], true);
+  };
+
+  const checkWinner = (): boolean => {
+    const winningIndexArray = winArrays.filter((winArr) => {
+      const [first, second, third] = winArr;
+      if (
+        grids[first] !== undefined &&
+        grids[first] === grids[second] &&
+        grids[second] === grids[third]
+      ) {
+        return winArr;
+      }
+    });
+
+    if (winningIndexArray.length > 0) {
+      const [firstWinArray] = winningIndexArray;
+      const winner = grids[firstWinArray[0]];
+      setWinner(winner);
+      setWinningIndexes(winningIndexArray);
+      return true;
+    }
+    return false;
+  };
+
+  const onGridPress = (index: number, byBot?: boolean) => {
+    const canGameContinue = gameState.length === 0;
+    let isValidTurn = true;
+    if (gameWith === "Bot" && turn === "ZERO" && !byBot) {
+      isValidTurn = false;
+    }
+
+    if (canGameContinue && isValidTurn && grids[index] === undefined) {
+      let newGrids = [...grids];
+      newGrids[index] = turn;
+      setGrids([...newGrids]);
+      Utils.PlaySound(Sounds.Move_Sound);
+    }
+  };
+
+  const onReset = () => {
+    setTurn("CROSS");
+    setGrids([...new Array(9)]);
+    setGameState("");
+    setWinner(undefined);
+    setWinningIndexes([]);
+  };
+
+  const isGameStarted = (): boolean => {
+    return grids.filter((v) => v !== undefined).length !== 0;
+  };
+
+  const getTurnLabelText = (): string => {
+    let emoji = "",
+      text = "";
+    if (gameState === "") {
+      if (turn === "CROSS") {
+        if (gameWith === "Bot") {
+          text = "Your Turn";
+        } else {
+          text = "X's Turn";
+        }
+      } else {
+        if (gameWith === "Bot") {
+          text = "Bot's Turn";
+        } else {
+          text = "O's Turn";
+        }
+      }
+    } else if (gameState === "Game Over") {
+      emoji = "⭐";
+      if (winner === "CROSS") {
+        if (gameWith === "Bot") {
+          text = " You Won ";
+        } else {
+          text = " X Won ";
+        }
+      } else {
+        if (gameWith === "Bot") {
+          text = " Bot Won ";
+        } else {
+          text = " O Won ";
+        }
+      }
+    } else {
+      emoji = "😑";
+      text = " Draw ";
+    }
+    return `${emoji}${text}${emoji}`;
+  };
+
+  const isInWinIndex = (index: number): boolean => {
+    const winIn = winningIndexes.flat();
+    return winIn.includes(index);
+  };
 
   return (
-    <Screen preset="scroll" safeAreaEdges={["top"]} contentContainerStyle={$container}>
+    <Layout style={{ justifyContent: "center" }}>
+      <View>
+        <Text
+          style={{
+            fontFamily: Font.FontName,
+            fontSize: 26,
+            color: ForegroundColor,
+            textAlign: "center",
+          }}
+        >
+          Opponent
+        </Text>
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <GameModeSelector
+            title="Friend"
+            onPress={() => setGameWith("Player")}
+            isSelected={gameWith === "Player"}
+            disabled={isGameStarted()}
+          />
+          <GameModeSelector
+            title="Bot"
+            onPress={() => setGameWith("Bot")}
+            isSelected={gameWith === "Bot"}
+            disabled={isGameStarted()}
+          />
+        </View>
+        <Divider />
+      </View>
       <Text
-        style={$reportBugsLink}
-        tx="demoDebugScreen.reportBugs"
-        onPress={() => openLinkInBrowser("https://github.com/infinitered/ignite/issues")}
-      />
-      <Text style={$title} preset="heading" tx="demoDebugScreen.title" />
-      <View style={$itemsContainer}>
-        <ListItem
-          LeftComponent={
-            <View style={$item}>
-              <Text preset="bold">App Id</Text>
-              <Text>{Application.applicationId}</Text>
+        style={{
+          fontFamily: Font.FontName,
+          fontSize: 40,
+          color: ForegroundColor,
+          textAlign: "center",
+        }}
+      >
+        {getTurnLabelText()}
+      </Text>
+      <View
+        style={{
+          marginVertical: 12,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <View
+          style={{
+            width: 300,
+            height: 300,
+            backgroundColor: "#2369EE",
+            borderRadius: 6,
+          }}
+        >
+          {[
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+          ].map(([ind1, ind2, ind3], i) => (
+            <View style={{ flexDirection: "row" }} key={`${i}`}>
+              <GridItem
+                index={ind1}
+                onPress={onGridPress}
+                state={grids[ind1]}
+                isWinningIndex={isInWinIndex(ind1)}
+              />
+              <GridItem
+                index={ind2}
+                onPress={onGridPress}
+                state={grids[ind2]}
+                isWinningIndex={isInWinIndex(ind2)}
+              />
+              <GridItem
+                index={ind3}
+                onPress={onGridPress}
+                state={grids[ind3]}
+                isWinningIndex={isInWinIndex(ind3)}
+              />
             </View>
-          }
-        />
-        <ListItem
-          LeftComponent={
-            <View style={$item}>
-              <Text preset="bold">App Name</Text>
-              <Text>{Application.applicationName}</Text>
-            </View>
-          }
-        />
-        <ListItem
-          LeftComponent={
-            <View style={$item}>
-              <Text preset="bold">App Version</Text>
-              <Text>{Application.nativeApplicationVersion}</Text>
-            </View>
-          }
-        />
-        <ListItem
-          LeftComponent={
-            <View style={$item}>
-              <Text preset="bold">App Build Version</Text>
-              <Text>{Application.nativeBuildVersion}</Text>
-            </View>
-          }
-        />
-        <ListItem
-          LeftComponent={
-            <View style={$item}>
-              <Text preset="bold">Hermes Enabled</Text>
-              <Text>{String(usingHermes)}</Text>
-            </View>
-          }
-        />
+          ))}
+        </View>
       </View>
-      <View style={$buttonContainer}>
-        <Button style={$button} tx="demoDebugScreen.reactotron" onPress={demoReactotron} />
-        <Text style={$hint} tx={`demoDebugScreen.${Platform.OS}ReactotronHint` as const} />
+      <Divider />
+      <View style={{ flexDirection: "row" }}>
+        <Button text={"Reset"} onPress={onReset} />
       </View>
-      <View style={$buttonContainer}>
-        <Button style={$button} tx="common.logOut" onPress={logout} />
-      </View>
-    </Screen>
-  )
-}
-
-const $container: ViewStyle = {
-  paddingTop: spacing.large + spacing.extraLarge,
-  paddingBottom: spacing.huge,
-  paddingHorizontal: spacing.large,
-}
-
-const $title: TextStyle = {
-  marginBottom: spacing.huge,
-}
-
-const $reportBugsLink: TextStyle = {
-  color: colors.tint,
-  marginBottom: spacing.large,
-  alignSelf: isRTL ? "flex-start" : "flex-end",
-}
-
-const $item: ViewStyle = {
-  marginBottom: spacing.medium,
-}
-
-const $itemsContainer: ViewStyle = {
-  marginBottom: spacing.extraLarge,
-}
-
-const $button: ViewStyle = {
-  marginBottom: spacing.extraSmall,
-}
-
-const $buttonContainer: ViewStyle = {
-  marginBottom: spacing.medium,
-}
-
-const $hint: TextStyle = {
-  color: colors.palette.neutral600,
-  fontSize: 12,
-  lineHeight: 15,
-  paddingBottom: spacing.large,
-}
+    </Layout>
+  );
+};
 
 // @demo remove-file

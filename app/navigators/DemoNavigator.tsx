@@ -75,7 +75,7 @@ export function DemoNavigator() {
         name="DemoDebug"
         component={DemoDebugScreen}
         options={{
-          tabBarLabel: "Testimonials",
+          tabBarLabel: "Play With Perry",
           tabBarIcon: ({ focused }) => <Icon icon="smiley" color={focused && '#9a9ca1'} size={24} />,
         }}
       />
