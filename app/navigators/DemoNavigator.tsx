@@ -37,7 +37,7 @@ export function DemoNavigator() {
       screenOptions={{
         headerShown: false,
         tabBarHideOnKeyboard: true,
-        tabBarStyle: [$tabBar, { height: bottom + 70 }],
+        tabBarStyle: [$tabBar, { height: bottom + 70, paddingRight: 20 }],
         tabBarActiveTintColor: colors.text,
         tabBarInactiveTintColor: colors.text,
         tabBarLabelStyle: $tabBarLabel,
@@ -84,8 +84,11 @@ export function DemoNavigator() {
 }
 
 const $tabBar: ViewStyle = {
-  backgroundColor: colors.background,
+  backgroundColor: '#fff',
   borderTopColor: colors.transparent,
+  display: 'flex',
+  width: '100%',
+  justifyContent: 'center'
 }
 
 const $tabBarItem: ViewStyle = {

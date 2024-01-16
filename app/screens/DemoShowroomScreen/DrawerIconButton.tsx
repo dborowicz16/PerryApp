@@ -29,11 +29,11 @@ export function DrawerIconButton(props: DrawerIconButtonProps) {
   })
 
   const animatedTopBarStyles = useAnimatedStyle(() => {
-    const backgroundColor = interpolateColor(progress.value, [0, 1], [colors.text, colors.tint])
+    const backgroundColor = '#FFF'
     const marginStart = interpolate(progress.value, [0, 1], [0, -11.5])
     const rotate = interpolate(progress.value, [0, 1], [0, isRTL ? 45 : -45])
     const marginBottom = interpolate(progress.value, [0, 1], [0, -2])
-    const width = interpolate(progress.value, [0, 1], [18, 12])
+    const width = 0
 
     return {
       backgroundColor,

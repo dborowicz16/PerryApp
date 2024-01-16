@@ -160,52 +160,13 @@ export const DemoShowroomScreen: FC<DemoTabScreenProps<"DemoShowroom">> =
     const $drawerInsets = useSafeAreaInsetsStyle(["top"])
 
     return (
-      <DrawerLayout
-        ref={drawerRef}
-        drawerWidth={Platform.select({ default: 326, web: Dimensions.get("window").width * 0.3 })}
-        drawerType={"slide"}
-        drawerPosition={isRTL ? "right" : "left"}
-        overlayColor={open ? colors.palette.overlay20 : "transparent"}
-        onDrawerSlide={(drawerProgress) => {
-          progress.value = open ? 1 - drawerProgress : drawerProgress
-        }}
-        onDrawerStateChanged={(newState: DrawerState, drawerWillShow: boolean) => {
-          if (newState === "Settling") {
-            progress.value = withTiming(drawerWillShow ? 1 : 0, {
-              duration: 250,
-            })
-            setOpen(drawerWillShow)
-          }
-        }}
-        renderNavigationView={() => (
-          <View style={[$drawer, $drawerInsets]}>
-            <View style={$logoContainer}>
-              <Image source={logo} style={$logoImage} />
-            </View>
-
-            <FlatList<{ name: string; useCases: string[] }>
-              ref={menuRef}
-              contentContainerStyle={$flatListContentContainer}
-              data={Object.values(Demos).map((d) => ({
-                name: d.name,
-                useCases: d.data.map((u) => u.props.name),
-              }))}
-              keyExtractor={(item) => item.name}
-              renderItem={({ item, index: sectionIndex }) => (
-                <ShowroomListItem {...{ item, sectionIndex, handleScroll }} />
-              )}
-            />
-          </View>
-        )}
-      >
         <Screen preset="fixed" safeAreaEdges={["top"]} contentContainerStyle={$screenContainer}>
-          <DrawerIconButton onPress={toggleDrawer} {...{ open, progress }} />
           <View style={{ display: 'flex', width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center' }}>
-            <Image source={require('../../../assets/images/perryHeader2.png')} style={{ width: 250, height: 250, resizeMode: 'contain' }} />
+            <Image source={require('../../../assets/images/perryHeader2.png')} style={{ width: 250, height: 250, resizeMode: 'contain', marginTop: 75 }} />
             <Text preset="heading" text="Welcome To The Official Perry App" style={{ textAlign: 'center' }} />
           </View>
         </Screen>
-      </DrawerLayout>
+
     )
   }
 

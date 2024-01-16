@@ -1,4 +1,4 @@
-import { Text, Pressable } from "react-native";
+import { Text, Pressable, Image } from "react-native";
 import { Font, ForegroundColor } from "../common/Const";
 
 interface GridItemProps {
@@ -33,15 +33,15 @@ const GridItem: React.FC<GridItemProps> = ({
           textAlign: "center",
           fontSize: isWinningIndex ? 65 : 55,
           fontFamily: Font.FontName,
-          color: ForegroundColor,
-          textShadowColor: isWinningIndex ? ForegroundColor : undefined,
+          color: '#FFF',
+          textShadowColor: isWinningIndex ? '#DDDBCB' : undefined,
           textShadowOffset: isWinningIndex
             ? { width: -1, height: 1 }
             : undefined,
           textShadowRadius: isWinningIndex ? 15 : undefined,
         }}
       >
-        {state === "CROSS" ? "X" : "O"}
+        {state === "CROSS" ? "X" : <Image style={{height: 90, width: 90}} source={require("../../assets/images/perryGamePiece.png")} />}
       </Text>
     ) : (
       <></>

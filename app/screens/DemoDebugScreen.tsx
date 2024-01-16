@@ -146,13 +146,13 @@ export const DemoDebugScreen: FC<DemoTabScreenProps<"DemoDebug">> = function Dem
         }
       } else {
         if (gameWith === "Bot") {
-          text = "Bot's Turn";
+          text = "Perry's Turn";
         } else {
           text = "O's Turn";
         }
       }
     } else if (gameState === "Game Over") {
-      emoji = "⭐";
+      emoji = "★";
       if (winner === "CROSS") {
         if (gameWith === "Bot") {
           text = " You Won ";
@@ -161,7 +161,7 @@ export const DemoDebugScreen: FC<DemoTabScreenProps<"DemoDebug">> = function Dem
         }
       } else {
         if (gameWith === "Bot") {
-          text = " Bot Won ";
+          text = " Perry Won ";
         } else {
           text = " O Won ";
         }
@@ -179,40 +179,14 @@ export const DemoDebugScreen: FC<DemoTabScreenProps<"DemoDebug">> = function Dem
   };
 
   return (
-    <Layout style={{ justifyContent: "center" }}>
-      <View>
-        <Text
-          style={{
-            fontFamily: Font.FontName,
-            fontSize: 26,
-            color: ForegroundColor,
-            textAlign: "center",
-          }}
-        >
-          Opponent
-        </Text>
-        <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <GameModeSelector
-            title="Friend"
-            onPress={() => setGameWith("Player")}
-            isSelected={gameWith === "Player"}
-            disabled={isGameStarted()}
-          />
-          <GameModeSelector
-            title="Bot"
-            onPress={() => setGameWith("Bot")}
-            isSelected={gameWith === "Bot"}
-            disabled={isGameStarted()}
-          />
-        </View>
-        <Divider />
-      </View>
+    <Layout style={{ justifyContent: "center", backgroundColor: '#F4f2f1' }}>
       <Text
         style={{
           fontFamily: Font.FontName,
           fontSize: 40,
-          color: ForegroundColor,
+          color: '#000',
           textAlign: "center",
+          lineHeight: 40,
         }}
       >
         {getTurnLabelText()}
@@ -228,7 +202,7 @@ export const DemoDebugScreen: FC<DemoTabScreenProps<"DemoDebug">> = function Dem
           style={{
             width: 300,
             height: 300,
-            backgroundColor: "#2369EE",
+            backgroundColor: "#FFF",
             borderRadius: 6,
           }}
         >
@@ -260,8 +234,7 @@ export const DemoDebugScreen: FC<DemoTabScreenProps<"DemoDebug">> = function Dem
           ))}
         </View>
       </View>
-      <Divider />
-      <View style={{ flexDirection: "row" }}>
+      <View style={{ flexDirection: "row", justifyContent: 'center' }}>
         <Button text={"Reset"} onPress={onReset} />
       </View>
     </Layout>

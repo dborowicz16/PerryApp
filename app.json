@@ -26,9 +26,9 @@
         "backgroundImage": "./assets/images/app-icon-android-adaptive-background.png"
       },
       "splash": {
-        "image": "./assets/images/splash-logo-android-universal.png",
+        "image": "./assets/images/perrySplashLogo.png",
         "resizeMode": "contain",
-        "backgroundColor": "#191015"
+        "backgroundColor": "#2c3045"
       }
     },
     "ios": {
@@ -36,10 +36,10 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.pizzaapp",
       "splash": {
-        "image": "./assets/images/splash-logo-ios-mobile.png",
-        "tabletImage": "./assets/images/splash-logo-ios-tablet.png",
+        "image": "./assets/images/loading.gif",
+        "tabletImage": "./assets/images/perrySplashLogo.png",
         "resizeMode": "contain",
-        "backgroundColor": "#191015"
+        "backgroundColor": "#f4f2f1"
       }
     },
     "web": {
@@ -47,7 +47,7 @@
       "splash": {
         "image": "./assets/images/splash-logo-web.png",
         "resizeMode": "contain",
-        "backgroundColor": "#191015"
+        "backgroundColor": "#2c3045"
       }
     }
   }
